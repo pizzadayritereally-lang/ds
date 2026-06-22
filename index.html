@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam — Получите подарочный код на $60</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap');
+        
+        :root {
+            --steam-dark: #171a21;
+            --steam-card: #1b2838;
+            --steam-blue: #66c0f4;
+            --steam-accent: #1999ff;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .steam-font {
+            font-family: 'Inter', system_ui, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        
+        .steam-bg {
+            background-color: #171a21;
+            background-image: 
+                linear-gradient(rgba(23, 26, 33, 0.95), rgba(23, 26, 33, 0.95)),
+                url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill-rule=%22evenodd%22%3E%3Cpath fill=%22%23232a3a%22 fill-opacity=%220.15%22 d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-10V8h-2v16h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 6v-4H4v4H0v2h4v4h2V8h4V6H6z%22/%3E%3C/g%3E%3C/svg%27');
+        }
+        
+        .steam-card {
+            background-color: #1b2838;
+            border: 1px solid #2a3f5f;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .steam-card:hover {
+            border-color: #66c0f4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+        }
+        
+        .steam-btn {
+            background: linear-gradient(to right, #66c0f4, #1999ff);
+            color: #171a21;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgb(102 192 244 / 0.3);
+        }
+        
+        .steam-btn:hover {
+            background: linear-gradient(to right, #1999ff, #66c0f4);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgb(102 192 244 / 0.4);
+        }
+        
+        .steam-nav {
+            background-color: #171a21;
+            border-bottom: 1px solid #2a3f5f;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: #66c0f4;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #66c0f4;
+            transition: width 0.2s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #66c0f4, transparent);
+        }
+        
+        .steam-code {
+            font-family: 'Roboto Mono', ui-monospace, monospace;
+            letter-spacing: 3px;
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        
+        .modal {
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes modalPop {
+            0% {
+                transform: scale(0.8) translateY(40px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .steam-header {
+            background: linear-gradient(#171a21, #171a21);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .fake-stat {
+            background: rgba(102, 192, 244, 0.08);
+            border: 1px solid rgba(102, 192, 244, 0.2);
+        }
+        
+        .game-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#171a21] text-[#c6d4df] min-h-screen">
+    <!-- Navbar -->
+    <nav class="steam-nav sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <div class="flex items-center justify-center w-9 h-9 bg-[#66c0f4] rounded-sm">
+                        <i class="fa-brands fa-steam text-[#171a21] text-3xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-white text-2xl font-bold tracking-tighter steam-font">STEAM</span>
+                    </div>
+                </div>
+
+                <!-- Menu -->
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="#" class="nav-link text-[#c6d4df] hover:text-white px-1">Магазин</a>
+                    <a href="#" class="nav-link text-[#c6d4df] hover:text-white px-1">Библиотека</a>
+                    <a href="#" class="nav-link text-[#c6d4df] hover:text-white px-1">Сообщество</a>
+                    <a href="#" class="nav-link text-[#c6d4df] hover:text-white px-1">Новости</a>
+                </div>
+
+                <!-- Profile -->
+                <div class="flex items-center gap-x-4">
+                    <div class="hidden sm:flex items-center gap-x-2 bg-[#1b2838] px-3 py-1.5 rounded-full border border-[#2a3f5f]">
+                        <div class="w-7 h-7 rounded-full overflow-hidden border border-[#66c0f4]">
+                            <img src="https://i.pravatar.cc/28?img=12" alt="Аватар" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-sm">
+                            <span class="font-semibold text-white">CyberGamer_92</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="logout()" 
+                            class="flex items-center gap-x-2 text-sm px-4 py-2 rounded-full hover:bg-[#2a3f5f] transition-colors">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                        <span class="hidden md:inline text-xs font-medium">ВЫЙТИ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="max-w-screen-xl mx-auto px-6 pt-12 pb-8">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left content -->
+            <div>
+                <div class="inline-flex items-center gap-x-2 bg-[#1b2838] border border-[#2a3f5f] px-4 py-1 rounded-full mb-6">
+                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <span class="text-emerald-400 text-sm font-semibold tracking-wider">ЛЕТНЯЯ АКЦИЯ 2026</span>
+                </div>
+                
+                <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-white leading-[1.05] mb-4">
+                    Получите<br>
+                    <span class="bg-gradient-to-r from-[#66c0f4] to-[#1999ff] bg-clip-text text-transparent">$60</span><br>
+                    на кошелёк Steam
+                </h1>
+                
+                <p class="max-w-md text-xl text-[#8f98a0] mb-8">
+                    Эксклюзивный подарочный код в честь летней распродажи. 
+                    Активируйте и играйте в любые игры уже сегодня.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="claimGiftCode()"
+                            class="steam-btn flex items-center justify-center gap-x-3 px-10 py-4 text-lg font-bold rounded-full shadow-xl">
+                        <i class="fa-solid fa-gift text-xl"></i>
+                        <span>ПОЛУЧИТЬ КОД СЕЙЧАС</span>
+                    </button>
+                    
+                    <button onclick="document.getElementById('how-section').scrollIntoView({ behavior: 'smooth' })" 
+                            class="flex items-center justify-center gap-x-2 px-8 py-4 text-base font-semibold border border-[#2a3f5f] hover:bg-[#1b2838] rounded-full transition-colors">
+                        <span>Как это работает</span>
+                    </button>
+                </div>
+                
+                <div class="mt-6 flex items-center gap-x-6 text-sm">
+                    <div class="flex -space-x-2">
+                        <div class="w-7 h-7 rounded-full border-2 border-[#171a21] overflow-hidden"><img src="https://i.pravatar.cc/28?img=28" alt=""></div>
+                        <div class="w-7 h-7 rounded-full border-2 border-[#171a21] overflow-hidden"><img src="https://i.pravatar.cc/28?img=47" alt=""></div>
+                        <div class="w-7 h-7 rounded-full border-2 border-[#171a21] overflow-hidden"><img src="https://i.pravatar.cc/28?img=15" alt=""></div>
+                    </div>
+                    <div class="text-[#8f98a0]">
+                        <span class="font-semibold text-white">148 392</span> человека уже получили код
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right visual -->
+            <div class="relative hidden md:block">
+                <div class="steam-card rounded-2xl p-8 border border-[#66c0f4]/30 shadow-2xl">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="text-[#66c0f4] text-sm font-bold tracking-[2px]">ПОДАРОЧНЫЙ КОД</div>
+                            <div class="text-4xl font-black text-white mt-1">$60.00</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="inline-block bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded font-bold">АКТИВЕН</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-[#0f141c] border border-[#2a3f5f] rounded-xl p-5 mb-6">
+                        <div class="flex justify-between text-xs text-[#8f98a0] mb-2">
+                            <div>КОД АКТИВАЦИИ</div>
+                            <div class="font-mono">••••••••••••</div>
+                        </div>
+                        <div class="h-px bg-[#2a3f5f] my-3"></div>
+                        <div class="text-center">
+                            <div class="inline-flex items-center gap-x-2 text-[#66c0f4]">
+                                <i class="fa-solid fa-check-circle"></i>
+                                <span class="font-semibold">Готов к активации</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-xs text-[#8f98a0] flex items-center justify-between">
+                        <div>Действует до: <span class="font-semibold text-white">29 июня 2026</span></div>
+                        <div class="font-mono text-[10px]">STEAM-2026</div>
+                    </div>
+                </div>
+                
+                <!-- Floating badge -->
+                <div class="absolute -top-3 -right-3 bg-[#171a21] border border-[#66c0f4] text-[#66c0f4] text-xs font-bold px-4 py-1 rounded-full shadow-xl flex items-center gap-x-1.5">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                    <span>ОГРАНИЧЕННО</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="fake-stat rounded-2xl p-5 flex items-center gap-x-4">
+                <div class="text-[#66c0f4]">
+                    <i class="fa-solid fa-users text-3xl"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-white">148k</div>
+                    <div class="text-xs text-[#8f98a0] -mt-1">ПОЛУЧИЛИ КОД</div>
+                </div>
+            </div>
+            <div class="fake-stat rounded-2xl p-5 flex items-center gap-x-4">
+                <div class="text-[#66c0f4]">
+                    <i class="fa-solid fa-globe text-3xl"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-white">87</div>
+                    <div class="text-xs text-[#8f98a0] -mt-1">СТРАН УЧАСТВУЮТ</div>
+                </div>
+            </div>
+            <div class="fake-stat rounded-2xl p-5 flex items-center gap-x-4">
+                <div class="text-[#66c0f4]">
+                    <i class="fa-solid fa-gamepad text-3xl"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-white">4.2m</div>
+                    <div class="text-xs text-[#8f98a0] -mt-1">ИГР КУПЛЕНО</div>
+                </div>
+            </div>
+            <div class="fake-stat rounded-2xl p-5 flex items-center gap-x-4">
+                <div class="text-emerald-400">
+                    <i class="fa-solid fa-clock text-3xl"></i>
+                </div>
+                <div>
+                    <div class="text-3xl font-black text-white">47</div>
+                    <div class="text-xs text-[#8f98a0] -mt-1">КОДОВ ОСТАЛОСЬ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How it works -->
+    <div id="how-section" class="max-w-screen-xl mx-auto px-6 pt-16 pb-12">
+        <div class="text-center mb-10">
+            <div class="section-title mx-auto">Как получить код</div>
+            <p class="text-[#8f98a0] mt-3">Три простых шага до игр вашей мечты</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Step 1 -->
+            <div class="steam-card rounded-2xl p-7">
+                <div class="w-12 h-12 flex items-center justify-center bg-[#66c0f4]/10 text-[#66c0f4] rounded-2xl mb-6">
+                    <span class="font-black text-3xl">1</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-white">Нажмите кнопку</h3>
+                <p class="text-[#8f98a0]">Нажмите «Получить код сейчас» и подтвердите участие в акции.</p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="steam-card rounded-2xl p-7">
+                <div class="w-12 h-12 flex items-center justify-center bg-[#66c0f4]/10 text-[#66c0f4] rounded-2xl mb-6">
+                    <span class="font-black text-3xl">2</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-white">Скопируйте код</h3>
+                <p class="text-[#8f98a0]">Ваш уникальный код появится в красивом модальном окне. Скопируйте его одним кликом.</p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="steam-card rounded-2xl p-7">
+                <div class="w-12 h-12 flex items-center justify-center bg-[#66c0f4]/10 text-[#66c0f4] rounded-2xl mb-6">
+                    <span class="font-black text-3xl">3</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-white">Активируйте в Steam</h3>
+                <p class="text-[#8f98a0]">Откройте Steam → Кошелёк → «Пополнить с помощью кода» и введите полученный код.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular games section -->
+    <div class="max-w-screen-xl mx-auto px-6 pb-16">
+        <div class="flex items-end justify-between mb-6">
+            <div>
+                <div class="section-title">Что можно купить на $60</div>
+                <p class="text-[#8f98a0]">Популярные игры этого лета</p>
+            </div>
+            <a href="#" class="hidden md:flex items-center text-sm text-[#66c0f4] hover:text-white font-semibold">
+                Смотреть все <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Game cards -->
+            <div class="game-card steam-card rounded-xl overflow-hidden border border-[#2a3f5f]">
+                <div class="h-40 bg-gradient-to-br from-orange-900 to-black relative">
+                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                        <div class="font-bold">Black Myth: Wukong</div>
+                        <div class="text-xs text-emerald-400">-$59.99</div>
+                    </div>
+                </div>
+                <div class="p-3 flex justify-between items-center text-xs">
+                    <div class="text-[#66c0f4]">98% положительных</div>
+                    <div class="font-mono text-[10px]">4.8m</div>
+                </div>
+            </div>
+            
+            <div class="game-card steam-card rounded-xl overflow-hidden border border-[#2a3f5f]">
+                <div class="h-40 bg-gradient-to-br from-violet-900 to-black relative">
+                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                        <div class="font-bold">Elden Ring</div>
+                        <div class="text-xs text-emerald-400">-$59.99</div>
+                    </div>
+                </div>
+                <div class="p-3 flex justify-between items-center text-xs">
+                    <div class="text-[#66c0f4]">92% положительных</div>
+                    <div class="font-mono text-[10px]">12m</div>
+                </div>
+            </div>
+            
+            <div class="game-card steam-card rounded-xl overflow-hidden border border-[#2a3f5f]">
+                <div class="h-40 bg-gradient-to-br from-sky-900 to-black relative">
+                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                        <div class="font-bold">Cyberpunk 2077</div>
+                        <div class="text-xs text-emerald-400">-$59.99</div>
+                    </div>
+                </div>
+                <div class="p-3 flex justify-between items-center text-xs">
+                    <div class="text-[#66c0f4]">89% положительных</div>
+                    <div class="font-mono text-[10px]">8.4m</div>
+                </div>
+            </div>
+            
+            <div class="game-card steam-card rounded-xl overflow-hidden border border-[#2a3f5f]">
+                <div class="h-40 bg-gradient-to-br from-rose-900 to-black relative">
+                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                        <div class="font-bold">Hades II</div>
+                        <div class="text-xs text-emerald-400">-$29.99</div>
+                    </div>
+                </div>
+                <div class="p-3 flex justify-between items-center text-xs">
+                    <div class="text-[#66c0f4]">96% положительных</div>
+                    <div class="font-mono text-[10px]">1.1m</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning / Demo notice -->
+    <div class="max-w-screen-xl mx-auto px-6 pb-12">
+        <div class="bg-[#1b2838] border border-yellow-900/50 rounded-2xl p-6 text-sm">
+            <div class="flex gap-x-4">
+                <div class="text-yellow-400 mt-0.5">
+                    <i class="fa-solid fa-exclamation-triangle text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="font-semibold text-yellow-300 mb-1">Это демонстрационный сайт</div>
+                    <div class="text-[#8f98a0] text-xs leading-relaxed">
+                        Данный сайт создан в учебных целях и стилизован под интерфейс Steam. 
+                        Все подарочные коды являются вымышленными и не имеют реальной денежной ценности. 
+                        Настоящие коды Steam можно получить только на официальном сайте 
+                        <a href="https://store.steampowered.com" target="_blank" class="underline hover:text-[#66c0f4]">store.steampowered.com</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#2a3f5f] py-8">
+        <div class="max-w-screen-xl mx-auto px-6 text-xs text-[#8f98a0]">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-y-4">
+                <div>© 2026 Steam. Все права защищены. Это фанатский/учебный проект.</div>
+                <div class="flex gap-x-6">
+                    <a href="#" class="hover:text-white">Политика конфиденциальности</a>
+                    <a href="#" class="hover:text-white">Условия использования</a>
+                    <a href="#" class="hover:text-white">Поддержка</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="success-modal" onclick="if (event.target.id === 'success-modal') closeModal()" 
+         class="hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="modal steam-card max-w-md w-full rounded-3xl overflow-hidden border border-[#66c0f4]/40 shadow-2xl">
+            
+            <!-- Modal header -->
+            <div class="bg-gradient-to-r from-[#1b2838] to-[#171a21] px-8 pt-8 pb-6 flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-x-3">
+                        <i class="fa-solid fa-gift text-[#66c0f4] text-3xl"></i>
+                        <div>
+                            <div class="font-black text-2xl text-white tracking-tight">Поздравляем!</div>
+                            <div class="text-emerald-400 text-sm font-semibold">Код успешно сгенерирован</div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-[#8f98a0] hover:text-white text-3xl leading-none">×</button>
+            </div>
+            
+            <div class="px-8 py-8">
+                <!-- Code display -->
+                <div class="mb-6">
+                    <div class="text-xs uppercase tracking-[1.5px] text-[#66c0f4] font-bold mb-2 px-1">ВАШ ПОДАРОЧНЫЙ КОД</div>
+                    
+                    <div id="code-display"
+                         class="steam-code bg-[#0f141c] border-2 border-[#66c0f4] text-white text-center py-5 px-4 rounded-2xl select-all cursor-pointer text-2xl md:text-3xl font-extrabold tracking-[4px]">
+                        <!-- JS inserts code here -->
+                    </div>
+                    
+                    <button onclick="copyCode()" 
+                            class="mt-3 w-full flex items-center justify-center gap-x-2 bg-[#1b2838] hover:bg-[#2a3f5f] border border-[#2a3f5f] transition-colors py-3 rounded-2xl text-sm font-bold">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>СКОПИРОВАТЬ КОД</span>
+                    </button>
+                </div>
+                
+                <div class="bg-[#0f141c] rounded-2xl p-5 text-sm">
+                    <div class="font-semibold mb-3 flex items-center gap-x-2 text-white">
+                        <i class="fa-solid fa-info-circle text-[#66c0f4]"></i>
+                        <span>Как активировать код в Steam</span>
+                    </div>
+                    <ol class="list-decimal list-inside space-y-1.5 text-[#c6d4df] text-sm pl-1">
+                        <li>Откройте клиент Steam</li>
+                        <li>Перейдите в раздел <span class="font-semibold">"Кошелёк"</span></li>
+                        <li>Нажмите <span class="font-semibold">"Пополнить кошелёк"</span></li>
+                        <li>Выберите <span class="font-semibold">"Ввести код Steam"</span></li>
+                        <li>Вставьте код и нажмите "Продолжить"</li>
+                    </ol>
+                </div>
+                
+                <div class="mt-6 flex items-start gap-x-3 text-xs text-yellow-300 bg-yellow-900/10 border border-yellow-900/30 p-4 rounded-2xl">
+                    <i class="fa-solid fa-exclamation-triangle mt-0.5"></i>
+                    <div>
+                        <span class="font-bold">Важно:</span> Код действителен в течение <span class="font-bold">7 дней</span>. 
+                        Не передавайте его третьим лицам.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-[#2a3f5f] px-8 py-5 bg-[#171a21] flex justify-end">
+                <button onclick="closeModal()" 
+                        class="px-8 py-2.5 text-sm font-bold rounded-full border border-[#2a3f5f] hover:bg-white/5 transition-colors">
+                    ЗАКРЫТЬ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#66c0f4');
+        }
+        
+        let currentCode = '';
+        
+        function generateSteamCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            
+            // Generate 20 character code with dashes every 5 chars (Steam-like format)
+            for (let i = 0; i < 20; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+                if ((i + 1) % 5 === 0 && i !== 19) {
+                    code += '-';
+                }
+            }
+            
+            return code;
+        }
+        
+        function claimGiftCode() {
+            // Generate new code
+            currentCode = generateSteamCode();
+            
+            // Show modal
+            const modal = document.getElementById('success-modal');
+            const codeDisplay = document.getElementById('code-display');
+            
+            codeDisplay.textContent = currentCode;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Optional: subtle confetti effect
+            createConfetti();
+        }
+        
+        function createConfetti() {
+            const colors = ['#66c0f4', '#1999ff', '#ffffff'];
+            const modal = document.getElementById('success-modal');
+            
+            for (let i = 0; i < 35; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '-10px';
+                particle.style.opacity = Math.random() + 0.4;
+                particle.style.zIndex = '200';
+                particle.style.pointerEvents = 'none';
+                
+                modal.appendChild(particle);
+                
+                const duration = Math.random() * 1800 + 1400;
+                const angle = Math.random() * 80 + 40;
+                
+                particle.animate([
+                    { 
+                        transform: `translateY(0) rotate(0deg)`,
+                        opacity: particle.style.opacity 
+                    },
+                    { 
+                        transform: `translateY(${window.innerHeight + 100}px) rotate(${angle * 4}deg)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                }).onfinish = () => {
+                    particle.remove();
+                };
+            }
+        }
+        
+        function copyCode() {
+            const codeDisplay = document.getElementById('code-display');
+            const originalText = codeDisplay.textContent;
+            
+            navigator.clipboard.writeText(currentCode).then(() => {
+                const btns = document.querySelectorAll('#success-modal button');
+                
+                // Find the copy button and change text temporarily
+                btns.forEach(btn => {
+                    if (btn.textContent.includes('СКОПИРОВАТЬ')) {
+                        const originalHTML = btn.innerHTML;
+                        btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>СКОПИРОВАНО!</span>`;
+                        btn.style.borderColor = '#10b981';
+                        btn.style.color = '#10b981';
+                        
+                        setTimeout(() => {
+                            if (btn && btn.parentNode) {
+                                btn.innerHTML = originalHTML;
+                                btn.style.borderColor = '';
+                                btn.style.color = '';
+                            }
+                        }, 1800);
+                    }
+                });
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = currentCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('Код скопирован в буфер обмена: ' + currentCode);
+            });
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function logout() {
+            const profileArea = document.querySelector('.flex.items-center.gap-x-4');
+            if (profileArea) {
+                profileArea.style.transition = 'all 0.2s ease';
+                profileArea.style.opacity = '0.3';
+                
+                setTimeout(() => {
+                    if (profileArea && profileArea.parentNode) {
+                        profileArea.innerHTML = `
+                            <button onclick="location.reload()" 
+                                    class="px-5 py-2 text-sm font-bold rounded-full bg-[#66c0f4] text-[#171a21]">
+                                ВОЙТИ ЧЕРЕЗ STEAM
+                            </button>
+                        `;
+                        profileArea.style.opacity = '1';
+                    }
+                }, 220);
+            }
+        }
+        
+        // Keyboard support
+        function setupKeyboardSupport() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('success-modal');
+                    if (!modal.classList.contains('hidden')) {
+                        closeModal();
+                    }
+                }
+                
+                // Easter egg: press "g" to claim
+                if (e.key.toLowerCase() === 'g' && document.activeElement.tagName === 'BODY') {
+                    const modal = document.getElementById('success-modal');
+                    if (modal.classList.contains('hidden')) {
+                        claimGiftCode();
+                    }
+                }
+            });
+            
+            // Click on code to copy
+            const codeDisplay = document.getElementById('code-display');
+            if (codeDisplay) {
+                codeDisplay.addEventListener('click', function() {
+                    if (currentCode) copyCode();
+                });
+            }
+        }
+        
+        // Fake live counter for remaining codes
+        function startLiveCounter() {
+            const counters = document.querySelectorAll('.fake-stat');
+            if (counters.length > 3) {
+                const remainingEl = counters[3].querySelector('.text-3xl');
+                if (remainingEl) {
+                    let remaining = 47;
+                    
+                    setInterval(() => {
+                        if (remaining > 12 && Math.random() > 0.7) {
+                            remaining--;
+                            remainingEl.textContent = remaining;
+                            
+                            // Flash effect
+                            remainingEl.style.transition = 'none';
+                            remainingEl.style.color = '#f87171';
+                            
+                            setTimeout(() => {
+                                remainingEl.style.transition = 'color 0.6s ease';
+                                remainingEl.style.color = '';
+                            }, 80);
+                        }
+                    }, 22000);
+                }
+            }
+        }
+        
+        // Initialize everything
+        function init() {
+            initializeTailwind();
+            setupKeyboardSupport();
+            startLiveCounter();
+            
+            // Easter egg hint in console
+            console.log('%c[Steam Gift] Нажмите клавишу "G" на странице, чтобы мгновенно получить код (пасхалка)', 'color:#66c0f4');
+            
+            // Bonus: Make the fake visual card clickable to claim
+            const visualCard = document.querySelector('.steam-card.rounded-2xl.p-8');
+            if (visualCard) {
+                visualCard.style.cursor = 'pointer';
+                visualCard.addEventListener('click', () => {
+                    claimGiftCode();
+                });
+                
+                // Tooltip hint
+                visualCard.title = "Нажмите, чтобы получить код";
+            }
+            
+            // Randomly show that "few codes left" toast after 25 seconds (once)
+            setTimeout(() => {
+                const remainingStats = document.querySelectorAll('.fake-stat');
+                if (remainingStats.length > 0 && document.getElementById('success-modal').classList.contains('hidden')) {
+                    // Could add a toast here if wanted, but skipped for cleanliness
+                }
+            }, 25000);
+        }
+        
+        // Boot app
+        window.onload = init;
+    </script>
+</body>
+</html>
